@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
-
 {% set interface_name = (item.value.iface | d(item.key)) %}
 {% set interface = item.value %}
+{% if interface.enabled | d(True) | bool %}
 {% set ifupdown__tpl_addresses = [] %}
 {% set ifupdown__tpl_ipv4_addresses = [] %}
 {% set ifupdown__tpl_ipv6_addresses = [] %}
@@ -212,4 +212,7 @@ mapping {{ interface_name }}
 
 {{ ("interface_name: " + (interface_name | to_nice_json)) | replace('\n$','') | comment(prefix='',postfix='') -}}
 {{ ("interface: " + (interface | to_nice_json)) | replace('\n$','') | comment(prefix='',postfix='') -}}
+{% endif %}
+{% else %}
+# Interface {{ interface_name }} has been disabled.
 {% endif %}
